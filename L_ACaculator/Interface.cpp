@@ -91,10 +91,10 @@ void Interface::vector_cacul2() {
     //    vl.push_back(vl[i - 1] * vl[j - 1]);
     //    break;
     //}
-    case '%': {
+    /*case '%': {
         vl.push_back(vl[i - 1] % vl[j - 1]);
         break;
-    }
+    }*/
     }
 }
 
@@ -170,7 +170,7 @@ void Interface::matrix_cacul2() {
         case 2: {
             cout << "选择要转置的矩阵:" << endl;
             int n; cin >> n;
-            ml.push_back(reverse(ml[n - 1]));
+            ml.push_back(ml[n - 1].mreverse());
             break;
         }
         case 3: {

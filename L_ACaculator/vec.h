@@ -14,25 +14,28 @@ private:
    //向量长度
 
 public:
-    vec() :length(0) {}
+    vec() :dimension(0) {}
     vec(int i);
     vec(initializer_list<int> list);
 
-    int length;
+    int dimension;
 
     void setVec(int i);
     void showVec();
-    void setLength(int i) { length = i; }
-    int getLength() const{ return length; }
 
     bool iszero();
 
     vec operator+(const vec &v);
     vec operator-(const vec &v);
-    vec operator*(const vec &v);
-    vec operator%(const vec &v);
+    //vec operator*(const vec &v);//叉乘
+    fraction operator%(const vec &v);//点乘
     vec operator*(int k);
     vec operator*(fraction k);
+
+    void operator+=(const vec& v);
+    void operator-=(const vec& v);
+
+    void Unitization();
 
 };
 

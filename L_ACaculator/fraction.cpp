@@ -1,7 +1,7 @@
 #include "fraction.h"
 
 ostream& operator << (ostream& os, fraction& f){
-	if (f.denominator == 1)
+	if (f.denominator == 1 || f.denominator == 0)
 		os << f.numerator;
 	else
 		os << f.numerator << '/' << f.denominator;
@@ -14,23 +14,39 @@ istream& operator >> (istream& in, fraction& f) {
 	return in;
 }
 
+//-------------------------------------------------------------------------------------------------------------------
+
+double fraction::value()const {
+	return (*this).denominator ? (*this).numerator / (double)(*this).denominator : (*this).numerator;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+
 fraction fraction::operator+(const fraction f) {
-	int i = (*this).numerator * f.denominator + (*this).denominator * f.numerator;
-	int j = (*this).denominator * f.denominator;
-	fraction result(i, j);
-	return result.adjust();
+	if ((*this).denominator == 0 || f.denominator == 0) {
+		return fraction((*this).value() + f.value(), 0);
+	}
+	fraction result((*this).numerator * f.denominator + (*this).denominator * f.numerator, (*this).denominator * f.denominator);
+	result.adjust();
+	return result;
 }
 
 fraction fraction::operator-(const fraction f) {
-	int i = (*this).numerator * f.denominator - (*this).denominator * f.numerator;
-	int j = (*this).denominator * f.denominator;
-	fraction result(i, j);
-	return result.adjust();
+	if ((*this).denominator == 0 || f.denominator == 0) {
+		return fraction((*this).value() - f.value(), 0);
+	}
+	fraction result((*this).numerator * f.denominator - (*this).denominator * f.numerator, (*this).denominator * f.denominator);
+	result.adjust();
+	return result;
 }
 
 fraction fraction::operator*(const fraction f) {
+	if ((*this).denominator == 0 || f.denominator == 0) {
+		return fraction((*this).value() * f.value(), 0);
+	}
 	fraction result((*this).numerator * f.numerator, (*this).denominator * f.denominator);
-	return result.adjust();
+	result.adjust();
+	return result;
 }
 
 fraction fraction::operator/(const fraction f) {
@@ -38,76 +54,54 @@ fraction fraction::operator/(const fraction f) {
 		cout << "³ýÊýÎª0" << endl;
 		return *this;
 	}
+	if ((*this).denominator == 0 || f.denominator == 0) {
+		return fraction((*this).value() / f.value(), 0);
+	}
 	fraction result((*this).numerator * f.denominator, (*this).denominator * f.numerator);
-	return result.adjust();
+	result.adjust();
+	return result;
 }
 
-fraction fraction::operator+(const int f)
-{
-	fraction result((*this).numerator + f * (*this).denominator, (*this).denominator);
-	return result.adjust();
-}
+//-------------------------------------------------------------------------------------------------------------------
 
-fraction fraction::operator-(const int f)
-{
-	fraction result((*this).numerator - f * (*this).denominator, (*this).denominator);
-	return result.adjust();
-}
 
-fraction fraction::operator*(const int f)
-{
-	fraction result((*this).numerator * f, (*this).denominator);
-	return result.adjust();
-}
 
-fraction fraction::operator/(const int f)
-{
-	fraction result((*this).numerator / f, (*this).denominator);
-	return result.adjust();
-}
+//-------------------------------------------------------------------------------------------------------------------
 
-void fraction::operator+=(const int f) {
-	(*this).numerator += f * (*this).denominator;
-	(*this).adjust();
-}
+
+
+//-------------------------------------------------------------------------------------------------------------------
 
 void fraction::operator+=(const fraction f) {
-	(*this).numerator = (*this).numerator * f.denominator + (*this).denominator * f.numerator;
-	(*this).denominator *= f.denominator;
-	(*this).adjust();
-}
-
-void fraction::operator-=(const int f) {
-	(*this).numerator -= f * (*this).denominator;
-	(*this).adjust();
+	(*this) = (*this) + f;
 }
 
 void fraction::operator-=(const fraction f) {
-	(*this).numerator = (*this).numerator * f.denominator - (*this).denominator * f.numerator;
-	(*this).denominator *= f.denominator;
-	(*this).adjust();
-}
-
-void fraction::operator*=(const int f) {
-	(*this).numerator *= f;
-	(*this).adjust();
+	(*this) = (*this) - f;
 }
 
 void fraction::operator*=(const fraction f) {
-	(*this).numerator *= f.numerator;
-	(*this).denominator *= f.denominator;
-	(*this).adjust();
-}
-
-void fraction::operator/=(const int f) {
-	(*this).numerator /= f;
-	(*this).adjust();
+	(*this) = (*this) * f;
 }
 
 void fraction::operator/=(const fraction f)	{
-	(*this).numerator *= f.denominator;
-	(*this).denominator *= f.numerator;
-	(*this).adjust();
+	(*this) = (*this) / f;
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+
+void fraction::fsqrt() {
+	(*this).denominator ? (*this).numerator = sqrt((*this).numerator / (*this).denominator) : (*this).numerator = sqrt((*this).numerator);
+	(*this).denominator = 0;
+}
+
+void fraction::power(int n) {
+	fraction temp = (*this);
+	n--;
+	while (n != 0) {
+		(*this) *= temp;
+		n--;
+	}
 }
 
 fraction& fraction::operator-()
@@ -116,7 +110,14 @@ fraction& fraction::operator-()
 	return *this;
 }
 
-fraction fraction::adjust() {
+//-------------------------------------------------------------------------------------------------------------------
+
+void fraction::adjust() {
+	if ((*this).numerator != (int)(*this).numerator) {
+		(*this).numerator /= (*this).denominator;
+		(*this).denominator = 0;
+		return;
+	}
 	int i = (*this).numerator;
 	int j = (*this).denominator;
 	while (1) {
@@ -132,5 +133,4 @@ fraction fraction::adjust() {
 		(*this).numerator = -(*this).numerator;
 		(*this).denominator = -(*this).denominator;
 	}
-	return *this;
 }

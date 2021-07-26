@@ -19,7 +19,7 @@ matrix::matrix(int n, int m, int k) :length(n), wide(m) {
 
 matrix::matrix(initializer_list<vec> list) {
 	length = list.size();
-	wide = list.begin()->getLength();
+	wide = list.begin()->dimension;
 	for (auto i :list) {
 		(*this).push_back(i);
 	}
@@ -63,11 +63,12 @@ void matrix::numbermult(int n) {
 	}
 }
 
-matrix reverse(matrix& mat) {
-	matrix res(mat.getwide(), mat.getlength());
-	for (int i = 0; i < mat.getwide(); i++) {
-		for (int j = 0; j < mat.getlength(); j++) {
-			res[i][j] = mat[j][i];
+matrix matrix::mreverse()
+{
+	matrix res((*this).getwide(), (*this).getlength());
+	for (int i = 0; i < (*this).getwide(); i++) {
+		for (int j = 0; j < (*this).getlength(); j++) {
+			res[i][j] = (*this)[j][i];
 		}
 	}
 	return res;
@@ -207,7 +208,7 @@ matrix matrix::columnDelete(int m) {
 }
 
 matrix matrix::addline(vec& v, int n) {
-	if (v.getLength() != (*this).wide) {
+	if (v.dimension != (*this).wide) {
 		cout << "长度不符合要求" << endl;
 		return *this;
 	}
@@ -225,7 +226,7 @@ matrix matrix::addline(vec& v, int n) {
 }
 
 matrix matrix::addcolumn(vec& v, int n) {
-	if (v.getLength() != (*this).length) {
+	if (v.dimension != (*this).length) {
 		cout << "长度不符合要求" << endl;
 		return *this;
 	}
@@ -237,12 +238,12 @@ matrix matrix::addcolumn(vec& v, int n) {
 	if(n <= (*this).wide)
 		for (int i = 0; i < result.length; i++) {
 			result[i].emplace(result[i].begin() + n - 1, v[i]);
-			result[i].length++;
+			result[i].dimension++;
 		}
 	else
 		for (int i = 0; i < result.length; i++) {
 			result[i].push_back(v[i]);
-			result[i].length++;
+			result[i].dimension++;
 		}
 	result.wide++;
 	return result;
@@ -258,15 +259,15 @@ matrix matrix::operator*(matrix& mat){
 	matrix res(l,w);
 	for (int i = 0; i < l; i++) {
 		for (int j = 0; j < w; j++) {
-			res[i][j] = cross((*this), mat, i, j, (*this).wide);
+			res[i][j] = cross((*this), mat, i, j);
 		}
 	}
 	return res;
 }
 
-fraction cross(matrix& mat1, matrix& mat2, int i, int j, int l) {
+fraction cross(matrix& mat1, matrix& mat2, int i, int j) {
 	fraction res;
-	for (int k = 0; k < l; k++) {
+	for (int k = 0; k < mat1.getwide(); k++) {
 		res += mat1[i][k] * mat2[k][j];
 	}
 	return res;
@@ -390,4 +391,48 @@ matrix matrix::equationsolve(vec& v) {	//1.判断解的类型，
 	result.push_back(t);
 	result.length++;
 	return result;
+}
+
+
+
+void matrix::lineSchmidt() {
+	int n = (*this).size();
+	int d = (*this)[0].dimension;
+	if (n > d) {
+		cout << "向量数大于维数，不存在都两两正交的向量组" << endl;
+		return;
+	}
+	if ((*this).rank() < n) {
+		cout << "向量组线性相关，不可正交化" << endl;
+		return;
+	}
+	for (int i = 1; i < n; i++) {
+		vec temp(d);
+		for (int j = i; j > 0; j--) {
+			fraction k = ((*this)[i] % (*this)[j - 1]) / ((*this)[j - 1] % (*this)[j - 1]);
+			temp += (*this)[j - 1]* k;
+		}
+		(*this)[i] -= temp;
+		(*this)[i].dimension = d;
+	}
+}
+
+void matrix::columnSchmidt() {
+	(*this)=(*this).mreverse();
+	(*this).lineSchmidt();
+	(*this) = (*this).mreverse();
+}
+
+void matrix::lineUnitization() {
+	for (int i = 0; i < (*this).length; i++) {
+		(*this)[i].Unitization();
+	}
+}
+
+void matrix::columnUnitization() {
+	(*this) = (*this).mreverse();
+	for (int i = 0; i < (*this).length; i++) {
+		(*this)[i].Unitization();
+	}
+	(*this) = (*this).mreverse();
 }

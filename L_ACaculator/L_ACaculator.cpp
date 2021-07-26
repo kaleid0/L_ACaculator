@@ -6,7 +6,21 @@
 
 //1.1更新,增加求矩阵的秩,将数据类型改为double
 //可使用={1,2,3}的方式对向量和矩阵初始化
-//1.2改double类型为自定义的分数类型，便于查看
+//1.2改double类型为自定义的分数类型fraction，便于查看
+
+//增加fraction类型根号操作之后可以转换成double的功能，
+
+//求特征值，QR分解
+//（1）对需要求解的特征值的矩阵进行QR分解
+//（2）对分解出来的结果进行逆向相乘
+//（3）将相乘得到的矩阵进行QR分解
+//（4）对分解出来的结果进行逆向相乘
+// 
+//求特征向量，用得到的特征值和原矩阵高斯消元，解方程
+//
+//施密特正交化,单位化
+//
+//
 
 #include <iostream>
 #include "Interface.h"
@@ -17,18 +31,37 @@ using namespace std;
 
 int main()
 {
+	/*Interface i;
+	i.start();*/
 
-	Interface i;
-	i.start();
 
-	/*matrix a = {
+	
+
+	//vec v1 = { 1,2,3 };
+	//vec v2 = { 2,3,4 };
+	//fraction f = v1 % v2;
+	//cout << f << endl;
+	//
+
+
+
+	matrix a = {
 		{1,2,3},
 		{4,5,6},
 		{7,8,9}
 	};
-	vec b = { 1,1,1 };
 
-	a.equationsolve(b).showMatrix();*/
+	matrix b = {
+		{1,2,3},
+		{4,5,6},
+		{7,8,9}
+	};
+
+	
+	b.lineSchmidt();
+	b.showMatrix();
+	//b.columnUnitization();
+	//b.showMatrix();
 
 
 	//vector<vector<int>> v = {

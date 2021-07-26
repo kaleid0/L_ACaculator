@@ -27,11 +27,14 @@ public:
 
 
 	void numbermult(int n);	//数乘
+	matrix mreverse();//转置
 	fraction det(); //行列式
 	int rank();	//秩
 	matrix guassianElimination();	//高斯消元
 	matrix adjugate();	//伴随
 	matrix inversion();	//逆
+
+	friend fraction cross(matrix& mat1, matrix& mat2, int i, int j);
 
 	void lineSwitch(int n, int m);	//行交换
 	matrix lineDelete(int n);
@@ -56,7 +59,13 @@ public:
 	matrix equationsolve();
 	matrix equationsolve(vec& v);
 
+
+	void lineSchmidt();
+	void columnSchmidt();
+	void lineUnitization();
+	void columnUnitization();
+
 };
 
-matrix reverse(matrix& mat);
-fraction cross(matrix& mat1, matrix& mat2, int i, int j, int l);
+//matrix reverse(matrix& mat);
+
