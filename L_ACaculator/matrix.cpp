@@ -352,7 +352,7 @@ matrix matrix::equationsolve() {
 	return result;
 }
 
-matrix matrix::equationsolve(vec& v) {	//1.判断解的类型，
+matrix matrix::equationsolve(vec& v) {	//1.判断解的类型，化上三角，
 	int r1 = (*this).rank();
 	int x = (*this).getwide();
 	matrix ad = (*this).addcolumn(v, x+1);
