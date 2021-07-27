@@ -88,11 +88,31 @@ vec vec::operator*(int k) {
 	return res;
 }
 
+vec vec::operator/(int k)
+{
+	vec res;
+	for (auto& i : *this) {
+		res.push_back(i / k);
+	}
+	res.dimension = (*this).dimension;
+	return res;
+}
+
 vec vec::operator*(fraction k)
 {
 	vec res;
 	for (auto& i : *this) {
 		res.push_back(i * k);
+	}
+	res.dimension = (*this).dimension;
+	return res;
+}
+
+vec vec::operator/(fraction k)
+{
+	vec res;
+	for (auto& i : *this) {
+		res.push_back(i / k);
 	}
 	res.dimension = (*this).dimension;
 	return res;
@@ -108,6 +128,25 @@ void vec::operator-=(const vec& v)
 	(*this) = (*this) - v;
 }
 
+void vec::operator*=(int k)
+{
+	(*this) = (*this) * k;
+}
+
+void vec::operator/=(int k)
+{
+	(*this) = (*this) / k;
+}
+
+void vec::operator*=(fraction f)
+{
+	(*this) = (*this) * f;
+}
+
+void vec::operator/=(fraction f)
+{
+	(*this) = (*this) / f;
+}
 
 
 void vec::Unitization() {

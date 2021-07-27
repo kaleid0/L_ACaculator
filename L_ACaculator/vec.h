@@ -30,10 +30,16 @@ public:
     //vec operator*(const vec &v);//²æ³Ë
     fraction operator%(const vec &v);//µã³Ë
     vec operator*(int k);
+    vec operator/(int k);
     vec operator*(fraction k);
+    vec operator/(fraction k);
 
     void operator+=(const vec& v);
     void operator-=(const vec& v);
+    void operator*=(int k);
+    void operator/=(int k);
+    void operator*=(fraction f);
+    void operator/=(fraction f);
 
     void Unitization();
 

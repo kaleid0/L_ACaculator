@@ -65,6 +65,9 @@ public:
 	void lineUnitization();
 	void columnUnitization();
 
+	vec QRiteration();
+	void QRdivide(matrix& Q,matrix& R);
+
 };
 
 //matrix reverse(matrix& mat);

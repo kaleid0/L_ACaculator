@@ -431,8 +431,61 @@ void matrix::lineUnitization() {
 
 void matrix::columnUnitization() {
 	(*this) = (*this).mreverse();
-	for (int i = 0; i < (*this).length; i++) {
-		(*this)[i].Unitization();
-	}
+	(*this).lineUnitization();
 	(*this) = (*this).mreverse();
+}
+
+vec matrix::QRiteration()
+{
+	matrix Q;
+	matrix R;
+	matrix a = (*this);
+	while (a[a.size()-1][0].value()>0.001) {
+		a.QRdivide(Q, R);
+		a = R * Q;
+		a.showMatrix();
+	}
+	vec res;
+	for (int i = 0; i < a.size(); i++) {
+		res.push_back(a[i][i]);
+	}
+	res.dimension = a.size();
+	return res;
+}
+
+void matrix::QRdivide(matrix& Q, matrix& R)//Q是列向量正交化单位化的矩阵，利用求Q的过程反推R矩阵
+{
+	int n = (*this).size();
+	int d = (*this)[0].dimension;
+	matrix q;
+	matrix r(d, d);
+	r[0][0] = fraction(1,1);
+	q = (*this).mreverse();
+
+	for (int i = 1; i < n; i++) {
+		vec temp(d);
+		//int c = 0;
+		for (int j = i; j > 0; j--) {
+			fraction k = (q[i] % q[j - 1]) / (q[j - 1] % q[j - 1]);
+			temp += q[j - 1] * k;
+			r[i][j - 1] = k;
+		}
+		r[i][i] = fraction(1, 1);
+		q[i] -= temp;
+		q[i].dimension = d;
+	}
+	r = r.mreverse();
+
+	for (int i = 0; i < q.length; i++) {
+		fraction sum;
+		for (auto n : q[i]) {
+			n.power(2);
+			sum += n;
+		}
+		sum.fsqrt();
+		r[i] *= sum;
+		q[i] /= sum;
+	}
+	R = r;
+	Q = q.mreverse();
 }

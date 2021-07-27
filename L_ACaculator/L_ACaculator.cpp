@@ -46,9 +46,9 @@ int main()
 
 
 	matrix a = {
-		{1,2,3},
-		{4,5,6},
-		{7,8,9}
+		{1,2,2},
+		{2,1,2},
+		{1,2,1}
 	};
 
 	matrix b = {
@@ -57,9 +57,19 @@ int main()
 		{7,8,9}
 	};
 
+	matrix c = {
+		{2,1,0,1},
+		{0,3,1,0},
+		{1,0,4,0},
+		{1,0,1,5}
+	};
+
+	matrix Q;
+	matrix R;
+	c.showMatrix();
+	vec v = c.QRiteration();
+	v.showVec();
 	
-	b.lineSchmidt();
-	b.showMatrix();
 	//b.columnUnitization();
 	//b.showMatrix();
 
