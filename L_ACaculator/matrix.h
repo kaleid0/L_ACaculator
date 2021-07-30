@@ -66,6 +66,7 @@ public:
 	void columnUnitization();
 
 	vec QRiteration();
+	fraction diagonal();
 	void QRdivide(matrix& Q,matrix& R);
 
 };

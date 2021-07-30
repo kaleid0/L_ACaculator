@@ -23,6 +23,7 @@
 //
 
 #include <iostream>
+#include<ctime>
 #include "Interface.h"
 #include "equation.h"
 //#include "test.cpp"
@@ -31,6 +32,9 @@ using namespace std;
 
 int main()
 {
+	time_t begin, end;
+	double ret;
+	begin = clock();
 	/*Interface i;
 	i.start();*/
 
@@ -64,12 +68,17 @@ int main()
 		{1,0,1,5}
 	};
 
-	matrix Q;
-	matrix R;
-	c.showMatrix();
-	vec v = c.QRiteration();
-	v.showVec();
+	matrix ab = a.adjugate();
+	fraction g = a.det();
+	a.QRiteration().showVec();
+	ab.QRiteration().showVec();
+	ab.showMatrix();
+	cout << g << endl;
 	
+	end = clock();
+	ret = double(end - begin) / CLOCKS_PER_SEC;
+	cout << "runtime:   " << ret << endl;
+
 	//b.columnUnitization();
 	//b.showMatrix();
 

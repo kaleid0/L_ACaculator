@@ -440,16 +440,30 @@ vec matrix::QRiteration()
 	matrix Q;
 	matrix R;
 	matrix a = (*this);
-	while (a[a.size()-1][0].value()>0.001) {
+	double d = 1;
+	while (/*a[a.size()-1][0].value()>0.00001*/d>0.000001) {
+		
 		a.QRdivide(Q, R);
 		a = R * Q;
-		a.showMatrix();
+		//a.showMatrix();
+		d = fabs((a.diagonal() - (*this).det()).value());
+		/*cout << a.diagonal().value() << endl;
+		cout << (*this).det().value() << endl;
+		cout << d << endl;*/
 	}
 	vec res;
 	for (int i = 0; i < a.size(); i++) {
 		res.push_back(a[i][i]);
 	}
 	res.dimension = a.size();
+	return res;
+}
+
+fraction matrix::diagonal() {
+	fraction res(1,1);
+	for (int i = 0; i < (*this).getlength(); i++) {
+		res *= (*this)[i][i];
+	}
 	return res;
 }
 

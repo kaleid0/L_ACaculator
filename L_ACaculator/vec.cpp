@@ -31,7 +31,7 @@ void vec::showVec() {
 		if (i != dimension - 1)
 			cout << ',';
 	}
-	cout << ']';
+	cout << ']' << endl;
 }
 
 bool vec::iszero() {
